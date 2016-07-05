@@ -1,0 +1,168 @@
+/*
+It is assumed that L1 and L2 are in sorted order(Based on the 'data' ).
+*/
+	#include<stdio.h>
+	#include<stdlib.h>
+	struct node
+	{
+		int data;
+		struct node *link;
+	};
+
+	struct node* getnode()
+	{
+	 return (struct node*)malloc(sizeof(struct node));
+	}
+
+	struct node* addnew(struct node *);
+	void display( struct node *);
+
+	struct node * append( struct node * , struct node *);
+
+	struct node * merge( struct node * , struct node *);
+
+	int main()
+	{
+	struct node *L1 , *L2 , *L3;
+	int ch;
+	L1 = NULL;
+	L2 = NULL;
+	L3 = NULL;
+
+	while(1)
+	{
+	  system("cls");
+	  printf("1. Add to first list\n");
+	  printf("2. Add to second list\n");
+	  printf("3. Display first list \n");
+	  printf("4. Display second list \n");
+	  printf("5. Merge and display \n");
+	  printf("6. Exit\n");
+
+		scanf("%d", &ch);
+		switch(ch)
+		{
+		case 1:
+			L1 = addnew(L1);
+			break;
+		case 2:
+			L2 = addnew(L2);
+			break;
+		case 3:
+			display( L1 );
+			break;
+		case 4:
+			display( L2 );
+			break;
+		case 5:
+			L3 = merge( L1 , L2 );
+			display( L3 );
+			break;
+		case 6:
+			return 0;;
+		}
+  getch();
+	}
+    return 0;
+	};
+
+	struct node * merge( struct node *L1 , struct node *L2 )
+	{
+		struct node *L3 , *T;
+		L3 = NULL;
+
+		while( L1 != NULL && L2!= NULL )
+		{
+			if( L1->data < L2->data )
+			{
+				L3 = append ( L3 , L1 );
+				L1 = L1->link;
+			}
+			else
+			{
+				L3 = append( L3 , L2 );
+				L2 = L2->link;
+			}
+		}
+
+		if( L1 == NULL )
+			T = L2;
+		else
+			T = L1;
+
+		while( T!= NULL)
+		{
+			L3 = append( L3 , T );
+			T = T->link;
+		}
+
+		return L3;
+	}
+
+
+	struct node* append( struct node *H , struct node *F )
+	{
+	 struct node *T;
+
+	 if( H == NULL ) // empty list
+	 {
+	  H = getnode();
+	  T = H;
+	 }
+	 else
+	 {
+		T = H;  // assign 1st node address
+
+		while( T->link!=NULL) // move until last node
+		T = T->link;
+
+	  T->link = getnode();  // last node link assigned to new node
+	  T = T->link;	// move towards new node
+	 }
+
+	 T->data = F->data;
+	 T->link = NULL;
+
+	 return H;
+	}
+
+
+	struct node* addnew( struct node *H )
+	{
+	 struct node *T;
+
+	 if( H == NULL ) // empty list
+	 {
+	  H = getnode();
+	  T = H;
+	 }
+	 else
+	 {
+		T = H;  // assign 1st node address
+
+		while( T->link!=NULL) // move until last node
+		T = T->link;
+
+	  T->link = getnode();  // last node link assigned to new node
+	  T = T->link;	// move towards new node
+	 }
+
+	 printf("Enter the data: \n");
+	 scanf("%d", &T->data );
+	 T->link = NULL;
+
+	 return H;
+	}
+
+	void display( struct node *T )
+	{
+	 printf("Data in the list : \n");
+
+	 while( T!= NULL )
+	 {
+	  printf("%p : [ %d ]-> %p\n", T , T->data , T->link );
+	  T = T->link;
+	 }
+
+	 }
+
